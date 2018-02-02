@@ -1,0 +1,75 @@
+/**
+ * @module index
+ */
+import ReactDOM from 'react-dom';
+import React from 'react';
+
+import moment from 'moment-timezone';
+import * as queryString from 'query-string';
+
+import Video from './video';
+import { SleepNotice } from './notice';
+
+class App extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      shrimpsAwake: false
+    }
+  }
+  
+  componentDidMount() {
+    this.timeCheck();
+    let intervalId = setInterval(this.timeCheck.bind(this), 2000);
+    this.setState({ intervalId });
+    this.setState({ channel: queryString.parse(location.search).v });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
+  }
+  
+  timeCheck() {
+    let current = moment().tz(this.props.timezone);
+    let wake = this.props.wakeAt.split(':');
+    wake = moment().tz(this.props.timezone).set({
+      hour: wake[0],
+      minute: wake[1],
+      second: wake[2]
+    });
+    let sleep = this.props.sleepAt.split(':');
+    sleep = moment().tz(this.props.timezone).set({
+      hour: sleep[0],
+      minute: sleep[1],
+      second: sleep[2]
+    });
+    let shrimpsAwake = current > wake && current < sleep;
+    if (shrimpsAwake !== this.state.shrimpsAwake) {
+      this.setState({ shrimpsAwake });
+    }
+  }
+
+  render() {
+    return <div>
+      <h1 className="text-center">
+        {this.state.channel ? 
+          <span>{this.state.channel}</span>
+          :
+          <span>
+            Shrimpcam 
+            <img src="shrimpicon/android-icon-96x96.png" />
+          </span>
+        }
+      </h1>
+      {!this.state.channel &&
+        <div className="container">
+          <SleepNotice {...this.props} />
+        </div>
+      }
+      {this.state.shrimpsAwake || this.state.channel ? <Video channel={this.state.channel || 'shrimpcam'} /> : null}
+    </div>;
+  }
+}
+
+ReactDOM.render(<App wakeAt="12:00" sleepAt="21:30" timezone="America/Los_Angeles" />, document.getElementById('react'));
