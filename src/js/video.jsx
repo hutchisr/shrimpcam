@@ -11,7 +11,7 @@ import Hls from 'hls.js';
  */
 export default class Video extends React.Component {
   static defaultProps = {
-    bufferLength: 2
+    bufferLength: 5
   }
 
   /**
@@ -26,13 +26,19 @@ export default class Video extends React.Component {
    * @param {HTMLVideoElement} node The component's <video> Element 
    */
   initPlayer(node) {
-    const source = `https://${document.domain}/hls/${this.props.channel}.m3u8`;
+    if (!node) return;
+    const domain = process.env.NODE_ENV === 'production' ? document.domain : 'shrimpcam.pw';
+    const source = `https://${domain}/hls/${this.props.channel}.m3u8`;
 
     if (Hls.isSupported()) {
-      let hls = new Hls({
+      const hls = this.hls = new Hls({
         // debug: true,
-        maxBufferLength: 10,
+        liveSyncDurationCount: 3,
+        liveMaxLatencyDurationCount: 5,
+        liveDurationInfinity: true,
+        enableWorker: true,
       });
+      window.hls = hls;
       hls.on(Hls.Events.ERROR, (evt, data) => {
         switch (data.details) {
           case Hls.ErrorDetails.MANIFEST_LOAD_ERROR:
@@ -63,9 +69,14 @@ export default class Video extends React.Component {
       node.setAttribute('src', source);
     }
 
+    this.bindVideoEventHandlers(node);
+  }
+  /**
+   * 
+   * @param {HTMLVideoElement} node 
+   */
+  bindVideoEventHandlers(node) {
     document.onkeypress = ev => this.handleKeyPress(node, ev);
-    node.onplay = ev => node.removeAttribute('controls');
-    // node.onclick = ev => this.togglePlay(node);
     node.ondblclick = ev => this.toggleFullscreen(node);
   }
   /**
@@ -77,18 +88,17 @@ export default class Video extends React.Component {
       ev.preventDefault();
       this.toggleFullscreen(node)
     }
-    if (['p', ' '].indexOf(ev.key) >= 0) {
-      ev.preventDefault();
-      this.togglePlay(node);
-    }
+    // if (['p', ' '].indexOf(ev.key) >= 0) {
+    //   ev.preventDefault();
+    //   this.togglePlayPause(node);
+    // }
   }
   /**
    * 
    * @param {HTMLVideoElement} node 
    */
-  togglePlay(node) {
+  togglePlayPause(node) {
     if (node.paused) {
-      node.currentTime = node.duration - this.props.bufferLength;
       node.play();
     } else {
       node.pause();
@@ -99,30 +109,27 @@ export default class Video extends React.Component {
    * @param {HTMLElement} node 
    */
   toggleFullscreen(node) {
-    if ((document.fullscreenElement && document.fullscreenElement !== null) ||
-      (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
-      (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
-      (document.msFullscreenElement && document.msFullscreenElement !== null)) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
+    const requestFullScreen = node.requestFullscreen
+      || node.msRequestFullscreen
+      || node.mozRequestFullScreen
+      || node.webkitRequestFullscreen;
+    const exitFullscreen = document.exitFullscreen
+      || document.msExitFullscreen
+      || document.mozCancelFullScreen
+      || document.webkitExitFullscreen;
+    const fullscreenElement = document.fullscreenElement
+      || document.msFullscreenElement
+      || document.mozFullScreenElement
+      || document.webkitFullscreenElement;
+    if (fullscreenElement && fullscreenElement !== null) {
+      exitFullscreen.call(document);
     } else {
-      if (node.requestFullscreen) {
-        node.requestFullscreen();
-      } else if (node.mozRequestFullScreen) {
-        node.mozRequestFullScreen();
-      } else if (node.webkitRequestFullscreen) {
-        node.webkitRequestFullscreen();
-      } else if (node.msRequestFullscreen) {
-        node.msRequestFullscreen();
-      }
+      requestFullScreen.call(node);
     }
+  }
+
+  componentWillUnmount() {
+    this.hls && this.hls.destroy();
   }
 
   render() {

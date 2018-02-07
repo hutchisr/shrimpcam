@@ -8,6 +8,7 @@ import moment from 'moment-timezone';
 import * as queryString from 'query-string';
 
 import Video from './video';
+import Dash from './dash';
 import { SleepNotice } from './notice';
 
 class App extends React.Component {
@@ -15,7 +16,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shrimpsAwake: false
+      shrimpsAwake: false,
+      dash: false,
     }
   }
   
@@ -49,8 +51,21 @@ class App extends React.Component {
       this.setState({ shrimpsAwake });
     }
   }
+  /**
+   * 
+   * @param {MouseEvent} ev 
+   */
+  togglePlayer(ev) {
+    ev.preventDefault();
+    if (this.state.dash) {
+      this.setState({ dash: false});
+    } else {
+      this.setState({ dash: true });
+    }
+  }
 
   render() {
+    const VideoPlayer = this.state.dash ? Dash : Video;
     return <div>
       <h1 className="text-center">
         {this.state.channel ? 
@@ -67,7 +82,13 @@ class App extends React.Component {
           <SleepNotice {...this.props} />
         </div>
       }
-      {this.state.shrimpsAwake || this.state.channel ? <Video channel={this.state.channel || 'shrimpcam'} /> : null}
+      {this.state.shrimpsAwake || this.state.channel ? 
+        <div>
+          <VideoPlayer channel={this.state.channel || 'shrimpcam'} /> 
+          <a onClick={this.togglePlayer.bind(this)} href="#">{this.state.dash ? 'HLS Player' : 'MPEG-DASH Player (Experimental)'}</a>
+        </div>
+        : null
+      }
     </div>;
   }
 }

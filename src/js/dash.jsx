@@ -3,8 +3,9 @@
  */
 import React from 'react';
 import {MediaPlayer} from 'dashjs';
+import Video from './video';
 
-export default class Dash extends React.Component {
+export default class Dash extends Video {
   /**
    * 
    * @param {React.Props} props 
@@ -17,14 +18,17 @@ export default class Dash extends React.Component {
    * @param {HTMLVideoElement} node 
    */
   initPlayer(node) {
-    let url = `https://${document.domain}/dash/${this.props.channel}.mpd`;
-    let player = MediaPlayer().create();
+    if (!node) return;
+    const url = `https://${document.domain}/dash/${this.props.channel}.mpd`;
+    const player = this.player = MediaPlayer().create();
     player.getDebug().setLogToBrowserConsole(false);
-    player.setLiveDelayFragmentCount(2);
+    // player.setLiveDelayFragmentCount(3);
     player.initialize(node, url, true);
+    
+    this.bindVideoEventHandlers(node);
   }
 
-  render() {
-    return <video ref={node => this.initPlayer(node)} controls autoPlay></video>
+  componentWillUnmount() {
+    this.player && this.player.reset();
   }
 }

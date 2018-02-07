@@ -7,12 +7,10 @@ $accepted_keys = [
 ];
 
 // file_put_contents(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'log.json', json_encode($_SERVER, JSON_PRETTY_PRINT));
-foreach (array_keys($_GET) as $password) {
-  foreach ($accepted_keys as $key) {
-    if (password_verify($password, $key)) {
-      $authenticated = true;
-      break 2;
-    }
+foreach ($accepted_keys as $key) {
+  if (password_verify($_GET['auth'], $key)) {
+    $authenticated = true;
+    break;
   }
 }
 if ($authenticated) {
