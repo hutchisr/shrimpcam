@@ -10,6 +10,7 @@ import * as queryString from 'query-string';
 import Video from './video';
 import Dash from './dash';
 import { SleepNotice } from './notice';
+import Footer from './footer';
 
 class App extends React.Component {
   
@@ -79,13 +80,13 @@ class App extends React.Component {
       </h1>
       {!this.state.channel &&
         <div className="container">
-          <SleepNotice {...this.props} />
+          <SleepNotice {...this.props} {...this.state} />
         </div>
       }
       {this.state.shrimpsAwake || this.state.channel ? 
         <div>
           <VideoPlayer channel={this.state.channel || 'shrimpcam'} /> 
-          <a onClick={this.togglePlayer.bind(this)} href="#">{this.state.dash ? 'HLS Player' : 'MPEG-DASH Player (Experimental)'}</a>
+          <Footer togglePlayer={this.togglePlayer.bind(this)} {...this.state} />
         </div>
         : null
       }
