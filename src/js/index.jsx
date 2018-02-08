@@ -68,16 +68,16 @@ class App extends React.Component {
   render() {
     const VideoPlayer = this.state.dash ? Dash : Video;
     return <div>
-      <h1 className="text-center">
+      <div className="text-center">
         {this.state.channel ? 
-          <span>{this.state.channel}</span>
+          <h1>{this.state.channel}</h1>
           :
-          <span>
+          <h1>
             Shrimpcam 
             <img src="shrimpicon/android-icon-96x96.png" />
-          </span>
+          </h1>
         }
-      </h1>
+      </div>
       {!this.state.channel &&
         <div className="container">
           <SleepNotice {...this.props} {...this.state} />
