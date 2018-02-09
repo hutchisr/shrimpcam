@@ -1,7 +1,6 @@
 /**
  * @module dash
  */
-import React from 'react';
 import {MediaPlayer} from 'dashjs';
 import Video from './video';
 
@@ -29,6 +28,11 @@ export default class Dash extends Video {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();    
+    this.player && this.player.reset();
+  }
+
+  componentWillUpdate() {
     this.player && this.player.reset();
   }
 }

@@ -9,18 +9,18 @@ const merge = require('webpack-merge');
 module.exports = env => {
   const config = {
     context: path.resolve(__dirname, 'src'),
-      entry: [
-        'babel-polyfill',
-        './js/index.jsx',
-        './styles/index.scss'
-      ],
-        devtool: 'source-map',
-          resolve: {
+    entry: [
+      'babel-polyfill',
+      './js/index.jsx',
+      './styles/index.scss'
+    ],
+    devtool: 'source-map',
+    resolve: {
       extensions: ['.js', '.jsx', '.css', '.scss']
     },
     output: {
       path: path.resolve('dist'),
-        filename: 'js/app.[chunkhash:8].js'
+      filename: 'js/app.[chunkhash:8].js'
     },
     module: {
       rules: [
@@ -56,7 +56,7 @@ module.exports = env => {
         { from: 'shrimpicon/**/* ' }
       ]),
     ],
-      devServer: {
+    devServer: {
       contentBase: path.resolve('dist')
     }
   };

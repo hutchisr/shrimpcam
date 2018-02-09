@@ -5,6 +5,8 @@ video {
     max-height: 100%;
     margin: auto;
     display: block;
+    transition: max-height 1s;
+    transition: max-width 1s;
 }
 
 .wrap {
