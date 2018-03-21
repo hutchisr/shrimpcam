@@ -1,16 +1,16 @@
-const webpack = require('webpack');
-const CompressionPlugin = require('compression-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const ZopfliPlugin = require("zopfli-webpack-plugin");
 
 module.exports = {
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-      }
+    new UglifyJsPlugin({
+      parallel: true,
+      cache: true,
+      sourceMap: true,
     }),
-    new CompressionPlugin({
+    new ZopfliPlugin({
       test: /(?<!\.php)$/,
-      deleteOriginalAssets: true
+      deleteOriginalAssets: true,
     })
   ]
 };

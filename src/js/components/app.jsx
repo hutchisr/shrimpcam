@@ -72,7 +72,7 @@ export default class App extends React.Component {
       }
       {this.props.awake || this.props.channel !== 'shrimpcam' ? 
         <div>
-          <Video /> 
+          <Video />
           <Footer />
         </div>
         : null

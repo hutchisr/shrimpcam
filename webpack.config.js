@@ -1,20 +1,20 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
+const HtmlPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 
-module.exports = env => {
+module.exports = () => {
   const config = {
-    context: path.resolve(__dirname, 'src'),
+    context: path.resolve(__dirname),
     entry: [
       'babel-polyfill',
-      './js/index.jsx',
-      './styles/index.scss'
+      './src/js/index.jsx',
+      './src/styles/index.scss'
     ],
-    devtool: 'source-map',
+    devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-source-map',
     resolve: {
       extensions: ['.js', '.jsx', '.css', '.scss']
     },
@@ -31,30 +31,57 @@ module.exports = env => {
         },
         {
           test: /\.html$/,
-          loader: 'html-loader'
+          loader: 'html-loader',
+          options: {
+            minimize: process.env.NODE_ENV === 'production'
+          }
         },
         {
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: ['css-loader?sourceMap', 'sass-loader?sourceMap']
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  sourceMap: true,
+                  minimize: process.env.NODE_ENV === 'production'
+                }
+              }, 
+              'resolve-url-loader',
+              'sass-loader?sourceMap',
+            ],
+            // Since we output to css/
+            publicPath: '../'
           })
         },
+        {
+          test: /\.(eot|svg|ttf|woff|woff2)$/,
+          loader: 'file-loader',
+          options: {
+            outputPath: 'fonts/',
+          },
+        }
       ]
     },
     plugins: [
+      new webpack.EnvironmentPlugin({
+        NODE_ENV: 'development'
+      }),      
       new CleanPlugin('dist/', {
         verbose: true,
         root: path.resolve(__dirname),
       }),
       new ExtractTextPlugin('css/app.[chunkhash:8].css'),
-      new HtmlWebpackPlugin({
-        template: 'index.html',
+      new HtmlPlugin({
+        template: 'src/index.html',
       }),
-      new CopyWebpackPlugin([
+      new CopyPlugin([
         { from: 'auth.php' },
-        { from: 'shrimpicon/**/* ' }
-      ]),
+        { from: 'shrimpicon/**/*' }
+      ], {
+        context: path.resolve(__dirname, 'src')
+      }),
     ],
     devServer: {
       contentBase: path.resolve('dist')

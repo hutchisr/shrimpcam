@@ -1,4 +1,4 @@
-export default (state = {player: 'hls'}, action) => {
+export default (state = {player: 'hls', paused: true}, action) => {
   switch (action.type) {
     case 'VIDEO_CANPLAY_SET':
       return {

@@ -1,12 +1,12 @@
 /**
  * @module hls
  */
-
+import React from 'react';
 import Hls from 'hls.js';
 import Video from './video';
 
 
-export default class HlsVideo extends Video {
+export default class HlsVideo extends React.Component {
   initPlayer(node) {
     if (!node) return;
     const domain = process.env.NODE_ENV === 'production' ? document.domain : 'shrimpcam.pw';
@@ -54,11 +54,14 @@ export default class HlsVideo extends Video {
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
     this.hls && this.hls.destroy();
   }
 
   componentWillUpdate() {
     this.hls && this.hls.destroy();
+  }
+
+  render() {
+    return <Video {...this.props} initPlayer={this.initPlayer} componentWillUnmount={this.componentWillUnmount} componentWillUpdate={this.componentWillUpdate} />;
   }
 }

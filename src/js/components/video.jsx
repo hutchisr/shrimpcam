@@ -19,13 +19,14 @@ export default class Video extends React.Component {
    */
   constructor(props) {
     super(props);
-
-    this.initPlayer = this.initPlayer.bind(this);
   }
+
   /**
    * @param {HTMLVideoElement} node The component's <video> Element 
    */
-  initplayer(node) {}
+  initPlayer(node) {
+    this.props.initPlayer.call(this, node);
+  }
 
   /**
    * 
@@ -45,10 +46,6 @@ export default class Video extends React.Component {
       ev.preventDefault();
       this.toggleFullscreen(node);
     }
-    // if (['p', ' '].indexOf(ev.key) >= 0) {
-    //   ev.preventDefault();
-    //   this.togglePlayPause(node);
-    // }
   }
   /**
    * 
@@ -84,8 +81,25 @@ export default class Video extends React.Component {
       requestFullScreen.call(node);
     }
   }
+  /**
+   * 
+   * @param {Event} ev 
+   * @param {boolean} canPlay
+   */
+  handleCanPlay(canPlay, ev) {
+    this.props.setCanPlay(canPlay);
+    if (canPlay) {
+      ev.target.classList.add('active');
+    }
+  }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.props.componentWillUnmount.call(this);
+  }
+
+  componentWillUpdate() {
+    this.props.componentWillUpdate.call(this);
+  }
 
   shouldComponentUpdate(nextProps) {
     return this.props.player !== nextProps.player ||
@@ -93,12 +107,12 @@ export default class Video extends React.Component {
   }
 
   render() {
-    return <div style={{position: 'relative'}}>
+    return <div style={{position: 'relative', display: 'table', margin: 'auto'}}>
       <Overlay ref={node => this.loadingComponent = node} />
       <video 
         ref={node => this.initPlayer(node)} 
-        onWaiting={() => this.props.setCanPlay(false)} 
-        onCanPlayThrough={() => this.props.setCanPlay(true)}
+        onWaiting={this.handleCanPlay.bind(this, false)} 
+        onCanPlayThrough={this.handleCanPlay.bind(this, true)}
         onPause={() => this.props.setPaused(true)}
         onPlay={() => this.props.setPaused(false)}
         autoPlay

@@ -1,4 +1,4 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import VideoWrapper from '../components/video-wrapper';
 
@@ -8,7 +8,11 @@ import {
   setPlayer
 } from '../actions/video';
 
-const mapStateToProps = (state) => state.video;
+const allowedProps = ['channel', 'player'];
+
+const mapStateToProps = (state) => Object.keys(state.video).filter(
+  key => allowedProps.includes(key)
+).reduce((obj, key) => ({...obj, [key]: state.video[key]}), {});
 
 const mapDispatchToProps = (dispatch) => ({
   setCanPlay: value => dispatch(setCanPlay(value)),
