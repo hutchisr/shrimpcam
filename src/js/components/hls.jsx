@@ -5,13 +5,24 @@ import React from 'react';
 import Hls from 'hls.js';
 import Video from './video';
 
+const domain = process.env.NODE_ENV === 'production' ? document.domain : 'shrimpcam.pw';
 
 export default class HlsVideo extends React.Component {
-  initPlayer(node) {
-    if (!node) return;
-    const domain = process.env.NODE_ENV === 'production' ? document.domain : 'shrimpcam.pw';
-    const source = `https://${domain}/hls/${this.props.channel}.m3u8`;
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      source: `https://${domain}/hls/${props.channel}.m3u8`
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      source: `https://${domain}/hls/${nextProps.channel}.m3u8`
+    };
+  }
+
+  initPlayer = (node) => {
     if (Hls.isSupported()) {
       const hls = this.hls = new Hls({
         // debug: true,
@@ -19,11 +30,11 @@ export default class HlsVideo extends React.Component {
         liveMaxLatencyDurationCount: 5,
         enableWorker: true,
       });
-      window.hls = hls;
+      window.hls = hls; // debug
       hls.on(Hls.Events.ERROR, (evt, data) => {
         switch (data.details) {
           case Hls.ErrorDetails.MANIFEST_LOAD_ERROR:
-            setTimeout(() => hls.loadSource(source), 2000);
+            setTimeout(() => hls.loadSource(this.state.source), 2000);
             break;
         }
         if (data.fatal) {
@@ -40,28 +51,30 @@ export default class HlsVideo extends React.Component {
           }
         }
       });
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        node.play();
-      });
-      hls.loadSource(source);
+      hls.loadSource(this.state.source);
       hls.attachMedia(node);
     }
     else {
       node.setAttribute('src', source);
     }
-
-    this.bindVideoEventHandlers(node);
   }
 
-  componentWillUnmount() {
-    this.hls && this.hls.destroy();
+  destroyVideo = (node) => {
+    if (Hls.isSupported()) {
+      this.hls.destroy();
+    }
   }
 
-  componentWillUpdate() {
-    this.hls && this.hls.destroy();
+  changeVideo = (node) => {
+    if (Hls.isSupported()) {
+      this.hls.loadSource(this.state.source);
+      this.hls.attachMedia(node);
+    } else {
+      node.setAttribute('src', this.state.source);
+    }
   }
 
   render() {
-    return <Video {...this.props} initPlayer={this.initPlayer} componentWillUnmount={this.componentWillUnmount} componentWillUpdate={this.componentWillUpdate} />;
+    return <Video {...this.props} initPlayer={this.initPlayer} destroyVideo={this.destroyVideo} changeVideo={this.changeVideo} />;
   }
 }

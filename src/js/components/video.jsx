@@ -21,11 +21,9 @@ export default class Video extends React.Component {
     super(props);
   }
 
-  /**
-   * @param {HTMLVideoElement} node The component's <video> Element 
-   */
-  initPlayer(node) {
-    this.props.initPlayer.call(this, node);
+  componentDidMount() {
+    this.props.initPlayer(this.playerHtmlNode);
+    this.bindVideoEventHandlers(this.playerHtmlNode);    
   }
 
   /**
@@ -34,8 +32,8 @@ export default class Video extends React.Component {
    */
   bindVideoEventHandlers(node) {
     document.onkeypress = ev => this.handleKeyPress(node, ev);
-    node.ondblclick = ev => this.toggleFullscreen(node);
-    node.onclick = ev => this.togglePlayPause(node);
+    node.ondblclick = () => this.toggleFullscreen(node);
+    node.onclick = () => this.togglePlayPause(node);
   }
   /**
    * @param {HTMLVideoElement} node 
@@ -86,7 +84,7 @@ export default class Video extends React.Component {
    * @param {Event} ev 
    * @param {boolean} canPlay
    */
-  handleCanPlay(canPlay, ev) {
+  handleCanPlay = (canPlay, ev) => {
     this.props.setCanPlay(canPlay);
     if (canPlay) {
       ev.target.classList.add('active');
@@ -94,11 +92,11 @@ export default class Video extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.componentWillUnmount.call(this);
+    this.props.destroyVideo(this.playerHtmlNode);
   }
-
-  componentWillUpdate() {
-    this.props.componentWillUpdate.call(this);
+  
+  componentDidUpdate() {
+    this.props.changeVideo(this.playerHtmlNode);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -110,12 +108,12 @@ export default class Video extends React.Component {
     return <div style={{position: 'relative', display: 'table', margin: 'auto'}}>
       <Overlay ref={node => this.loadingComponent = node} />
       <video 
-        ref={node => this.initPlayer(node)} 
+        ref={node => this.playerHtmlNode = node} 
         onWaiting={this.handleCanPlay.bind(this, false)} 
-        onCanPlayThrough={this.handleCanPlay.bind(this, true)}
+        onCanPlayThrough={this.handleCanPlay.bind(undefined, true)}
         onPause={() => this.props.setPaused(true)}
         onPlay={() => this.props.setPaused(false)}
-        autoPlay
+        autoPlay muted
       />
     </div>;
   }

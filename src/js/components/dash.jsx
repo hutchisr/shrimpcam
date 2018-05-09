@@ -5,6 +5,7 @@ import React from 'react';
 import {MediaPlayer} from 'dashjs';
 import Video from './video';
 
+const domain = process.env.NODE_ENV === 'production' ? document.domain : 'shrimpcam.pw';
 export default class Dash extends React.Component {
   /**
    * 
@@ -12,32 +13,38 @@ export default class Dash extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.state = {
+      source: `https://${domain}/dash/${props.channel}.mpd`
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      source: `https://${domain}/dash/${nextProps.channel}.mpd`
+    };
   }
   /**
    * 
    * @param {HTMLVideoElement} node 
    */
-  initPlayer(node) {
-    if (!node) return;
-    const domain = process.env.NODE_ENV === 'production' ? document.domain : 'shrimpcam.pw';    
-    const url = `https://${domain}/dash/${this.props.channel}.mpd`;
+  initPlayer = (node) => {
     const player = this.player = MediaPlayer().create();
     player.getDebug().setLogToBrowserConsole(false);
     // player.setLiveDelayFragmentCount(3);
-    player.initialize(node, url, true);
-    
-    this.bindVideoEventHandlers(node);
+    player.initialize(node, this.state.source, true);
   }
 
-  componentWillUnmount() {
-    this.player && this.player.reset();
+  destroyVideo = (node) => {
+    this.player.reset();
   }
 
-  componentWillUpdate() {
-    this.player && this.player.reset();
+  changeVideo = (node) => {
+    this.player.reset();
+    this.player.initialize(node, this.state.source, true);
+
   }
 
   render() {
-    return <Video {...this.props} initPlayer={this.initPlayer} componentWillUnmount={this.componentWillUnmount} componentWillUpdate={this.componentWillUpdate} />;
+    return <Video {...this.props} initPlayer={this.initPlayer} destroyVideo={this.destroyVideo} changeVideo={this.changeVideo} />;
   }
 }

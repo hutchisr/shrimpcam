@@ -2,12 +2,13 @@ const path = require('path');
 const HtmlPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 
 module.exports = () => {
   const config = {
+    mode: 'none',
     context: path.resolve(__dirname),
     entry: [
       'babel-polyfill',
@@ -20,7 +21,8 @@ module.exports = () => {
     },
     output: {
       path: path.resolve('dist'),
-      filename: 'js/app.[chunkhash:8].js'
+      filename: 'js/app.[chunkhash:8].js',
+      chunkFilename: 'js/[name].[chunkhash:8].js'
     },
     module: {
       rules: [
@@ -38,22 +40,23 @@ module.exports = () => {
         },
         {
           test: /\.scss$/,
-          use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  sourceMap: true,
-                  minimize: process.env.NODE_ENV === 'production'
-                }
-              }, 
-              'resolve-url-loader',
-              'sass-loader?sourceMap',
-            ],
-            // Since we output to css/
-            publicPath: '../'
-          })
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                publicPath: '../'
+              }
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                minimize: process.env.NODE_ENV === 'production'
+              }
+            }, 
+            'resolve-url-loader',
+            'sass-loader?sourceMap',
+          ],
         },
         {
           test: /\.(eot|svg|ttf|woff|woff2)$/,
@@ -72,7 +75,9 @@ module.exports = () => {
         verbose: true,
         root: path.resolve(__dirname),
       }),
-      new ExtractTextPlugin('css/app.[chunkhash:8].css'),
+      new MiniCssExtractPlugin({
+        filename: 'css/app.[chunkhash:8].css'
+      }),
       new HtmlPlugin({
         template: 'src/index.html',
       }),
@@ -88,4 +93,4 @@ module.exports = () => {
     }
   };
   return process.env.NODE_ENV === 'production' ? merge(config, require('./webpack.production')) : config;
-}
+};
