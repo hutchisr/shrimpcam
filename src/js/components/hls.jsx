@@ -55,7 +55,7 @@ export default class HlsVideo extends React.Component {
       hls.attachMedia(node);
     }
     else {
-      node.setAttribute('src', source);
+      node.setAttribute('src', this.state.source);
     }
   }
 

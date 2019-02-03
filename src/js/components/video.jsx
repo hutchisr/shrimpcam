@@ -32,7 +32,16 @@ export default class Video extends React.Component {
    */
   bindVideoEventHandlers(node) {
     document.onkeypress = ev => this.handleKeyPress(node, ev);
-    node.ondblclick = () => this.toggleFullscreen(node);
+    if (screen.orientation) { screen.orientation.onchange = () => { 
+      const orientation = screen.msOrientation || (screen.orientation || screen.mozOrientation || {}).type;
+      switch (orientation.split('-')[0]) {
+        case 'landscape':
+          this.toggleFullscreen(node, true);
+          break;
+        default:
+          this.toggleFullscreen(node, false);
+      }
+    }; }
     node.onclick = () => this.togglePlayPause(node);
   }
   /**
@@ -50,9 +59,9 @@ export default class Video extends React.Component {
    * @param {HTMLVideoElement} node 
    */
   togglePlayPause(node) {
-    if (node.paused) {
+    if (node.paused || node.ended) {
       node.play();
-    } else {
+    } else if (!node.paused) {
       node.pause();
     }
   }
@@ -60,7 +69,7 @@ export default class Video extends React.Component {
   /**
    * @param {HTMLElement} node 
    */
-  toggleFullscreen(node) {
+  toggleFullscreen(node, fullscreen='auto') {
     const requestFullScreen = node.requestFullscreen
       || node.msRequestFullscreen
       || node.mozRequestFullScreen
@@ -73,10 +82,10 @@ export default class Video extends React.Component {
       || document.msFullscreenElement
       || document.mozFullScreenElement
       || document.webkitFullscreenElement;
-    if (fullscreenElement && fullscreenElement !== null) {
-      exitFullscreen.call(document);
-    } else {
-      requestFullScreen.call(node);
+    if (fullscreenElement && fullscreenElement !== null && (fullscreen === false || fullscreen === 'auto')) {
+      exitFullscreen && exitFullscreen.call(document);
+    } else if (fullscreen === true || fullscreen === 'auto') {
+      requestFullScreen && requestFullScreen.call(node);
     }
   }
   /**

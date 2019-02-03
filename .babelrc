@@ -1,7 +1,7 @@
 {
   "presets": [
-    "react",
-    ["env", {
+    "@babel/react",
+    ["@babel/preset-env", {
       "targets": {
         "browsers": [
           "last 2 versions"
@@ -10,14 +10,14 @@
     }]
   ],
   "plugins": [
-    "transform-class-properties",
-    "transform-object-rest-spread",
-    "syntax-dynamic-import"
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-syntax-dynamic-import"
   ],
   "env": {
     "development": {
       "plugins": [
-        "transform-react-jsx-source"
+        "@babel/plugin-transform-react-jsx-source"
       ]
     }
   }

@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const CleanPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 const merge = require('webpack-merge');
@@ -11,7 +10,7 @@ module.exports = () => {
     mode: 'none',
     context: path.resolve(__dirname),
     entry: [
-      'babel-polyfill',
+      '@babel/polyfill',
       './src/js/index.jsx',
       './src/styles/index.scss'
     ],
@@ -51,7 +50,6 @@ module.exports = () => {
               loader: 'css-loader',
               options: {
                 sourceMap: true,
-                minimize: process.env.NODE_ENV === 'production'
               }
             }, 
             'resolve-url-loader',
@@ -71,10 +69,6 @@ module.exports = () => {
       new webpack.EnvironmentPlugin({
         NODE_ENV: 'development'
       }),      
-      new CleanPlugin('dist/', {
-        verbose: true,
-        root: path.resolve(__dirname),
-      }),
       new MiniCssExtractPlugin({
         filename: 'css/app.[chunkhash:8].css'
       }),
