@@ -2,14 +2,14 @@
  * @module dash
  */
 import React from 'react';
-import {MediaPlayer} from 'dashjs';
+import { MediaPlayer } from 'dashjs';
 import Video from './video';
 
 const domain = process.env.NODE_ENV === 'production' ? document.domain : 'shrimpcam.pw';
 export default class Dash extends React.Component {
   /**
-   * 
-   * @param {React.Props} props 
+   *
+   * @param {React.Props} props
    */
   constructor(props) {
     super(props);
@@ -24,13 +24,11 @@ export default class Dash extends React.Component {
     };
   }
   /**
-   * 
-   * @param {HTMLVideoElement} node 
+   *
+   * @param {HTMLVideoElement} node
    */
   initPlayer = (node) => {
     const player = this.player = MediaPlayer().create();
-    player.getDebug().setLogToBrowserConsole(false);
-    // player.setLiveDelayFragmentCount(3);
     player.initialize(node, this.state.source, true);
   }
 

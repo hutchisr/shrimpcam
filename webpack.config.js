@@ -20,8 +20,8 @@ module.exports = () => {
     },
     output: {
       path: path.resolve('dist'),
-      filename: 'js/app.[chunkhash:8].js',
-      chunkFilename: 'js/[name].[chunkhash:8].js'
+      filename: 'js/app.js',
+      chunkFilename: 'js/[name].js'
     },
     module: {
       rules: [
@@ -51,7 +51,7 @@ module.exports = () => {
               options: {
                 sourceMap: true,
               }
-            }, 
+            },
             'resolve-url-loader',
             'sass-loader?sourceMap',
           ],
@@ -68,7 +68,7 @@ module.exports = () => {
     plugins: [
       new webpack.EnvironmentPlugin({
         NODE_ENV: 'development'
-      }),      
+      }),
       new MiniCssExtractPlugin({
         filename: 'css/app.[chunkhash:8].css'
       }),
