@@ -51,7 +51,7 @@
     "hls.js": "^0.14.0",
     "jquery": "^3.3.1",
     "moment": "^2.20.1",
-    "moment-timezone": "^0.5.14",
+    "moment-timezone": "^0.5.35",
     "open-iconic": "^1.1.1",
     "prop-types": "^15.6.0",
     "query-string": "^6.1.0",
