@@ -1,6 +1,6 @@
 # shrimpcam 2.0
 
-a rewrite of (shrimpcam)[https://github.com/hutchisr/shrimpcam] using SvelteKit and TailwindCSS.
+a rewrite of [shrimpcam](https://github.com/hutchisr/shrimpcam) using SvelteKit and TailwindCSS.
 ## Development
 
 Install dependencies with `npm install` and start a development server:
