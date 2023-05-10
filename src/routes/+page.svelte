@@ -5,8 +5,7 @@
   // Shrimp notification transition
   let show = true
 
-  // Shrimpcam controls
-  let play = true
+  // pause the video when the user clicks the pause button
 
   // Get the current time in PST and update it every second
   let pstTime = new Date().toLocaleTimeString("en-US", {
@@ -79,15 +78,4 @@
       />
     </media-outlet>
   </media-player>
-</div>
-<!-- Controls -->
-<div class="pt-8 flex min-w-full items-center justify-center">
-  <button
-    on:click={() => (play = !play)}
-    class="py-2 px-3.5 rounded-xs outline outline-2 text-white outline-blue-200 bg-blue-400 hover:bg-blue-500 hover:text-white transition-colors duration-300"
-  >
-    <p class="text-white font-bold text-sm text-center w-12">
-      {play ? "Pause" : "Play"}
-    </p>
-  </button>
 </div>
