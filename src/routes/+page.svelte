@@ -5,10 +5,6 @@
   // Shrimp notification transition
   let show = true
 
-  // pause the video when the user clicks the pause button
-
-  let bgColor = "bg-white"
-
   let playerHiddenStyle = "block"
   let shrimpSleepingStyle = "hidden"
 
@@ -63,9 +59,9 @@
           <!-- left -->
           <div class="mx-auto md:mx-0 px-1">
             <p class="text-white font-bold text-sm text-center md:text-left">
-              The shrimps' lights are on from 12:00:00 to 21:00:00.
+              The shrimps' lights are on from 12:00:00 to 21:00:00 PST.
               <br class="md:hidden" />
-              The current time is {pstTime}.
+              The current time is {pstTime} PST.
               <br class={shrimpSleepingStyle} />
               <span class={shrimpSleepingStyle}>
                 Shrimps are sleeping — Good night!
@@ -87,14 +83,16 @@
   </div>
 </Transition>
 <!-- Shrimpcam -->
-<div class="lg:max-w-6xl lg:mx-auto {playerHiddenStyle}">
+<div class="max-w-6xl lg:mx-auto">
   <!-- shrimpcam! -->
-  <media-player autoplay controls muted aspect-ratio="16/9">
-    <media-outlet>
-      <source
-        src="https://shrimpcam.app/hls/shrimpcam.m3u8"
-        type="application/x-mpegurl"
-      />
-    </media-outlet>
-  </media-player>
+  <div class={playerHiddenStyle}>
+    <media-player autoplay controls muted aspect-ratio="16/9">
+      <media-outlet>
+        <source
+          src="https://shrimpcam.app/hls/shrimpcam.m3u8"
+          type="application/x-mpegurl"
+        />
+      </media-outlet>
+    </media-player>
+  </div>
 </div>

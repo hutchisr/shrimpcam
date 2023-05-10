@@ -11,7 +11,7 @@
   })
 
   if (pstTime > "21:00:00" || pstTime < "12:00:00") {
-    bgColor = "bg-zinc-700"
+    bgColor = "bg-zinc-800"
     textColor = "text-white"
   } else {
     bgColor = "bg-white"
