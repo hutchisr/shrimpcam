@@ -70,7 +70,7 @@
 <!-- Shrimpcam -->
 <div class="lg:max-w-6xl lg:mx-auto">
   <!-- shrimpcam! -->
-  <media-player autoplay muted aspect-ratio="16/9">
+  <media-player autoplay controls muted aspect-ratio="16/9">
     <media-outlet>
       <source
         src="https://shrimpcam.app/hls/shrimpcam.m3u8"
