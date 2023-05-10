@@ -22,4 +22,9 @@ npm run build
 
 You can preview the production build with `npm run preview`.
 
-Use a reverse proxy with Caddy or something after.
+then run:
+
+```bash
+node build
+```
+You can use a reverse proxy with Caddy or something after to host the production site on the web!
