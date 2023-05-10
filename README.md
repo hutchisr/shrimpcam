@@ -1,3 +1,2 @@
-Frontend code for https://shrimpcam.pw
-
-I know there are password hashes in auth.php. I don't care.
+# shrimp cam 2.0
+Basically a complete rewrite of shrimpcamp.
