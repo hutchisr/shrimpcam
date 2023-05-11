@@ -1,6 +1,6 @@
-# Shrimpcam
+# Shrimpcam!
 
-a rewrite of [shrimpcam](https://github.com/hutchisr/shrimpcam) using SvelteKit and Tailwind CSS.
+This is a rewrite of [shrimpcam](https://github.com/hutchisr/shrimpcam) using SvelteKit and Tailwind CSS.
 
 ## Development
 
