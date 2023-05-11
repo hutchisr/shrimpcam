@@ -83,7 +83,7 @@
   </div>
 </Transition>
 <!-- Shrimpcam -->
-<div class="min-w-full mx-auto">
+<div class="max-w-[1920px] mx-auto">
   <!-- shrimpcam! -->
   <div class={playerHiddenStyle}>
     <media-player autoplay controls muted aspect-ratio="16/9">
