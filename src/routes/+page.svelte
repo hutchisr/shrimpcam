@@ -59,7 +59,9 @@
           <!-- left -->
           <div class="mx-auto md:mx-0 px-1">
             <p class="text-white font-bold text-sm text-center md:text-left">
-              The shrimps' lights are on from 12:00:00 to 21:00:00 PST.
+              The shrimps' lights are on from
+              <br class="md:hidden" />
+              12:00:00 to 21:00:00 PST.
               <br class="md:hidden" />
               The current time is {pstTime} PST.
               <br class={shrimpSleepingStyle} />
@@ -94,5 +96,37 @@
         />
       </media-outlet>
     </media-player>
+  </div>
+</div>
+
+<!-- footer bar -->
+<div class="bottom-0" />
+<!-- copywrite container -->
+<div class="py-6 px-8 lg:px-12">
+  <div class="lg:container lg:mx-auto">
+    <!-- grid -->
+    <div class="grid-cols-1 lg:grid-cols-3 grid">
+      <!-- grid item 1 -->
+      <div class="hidden lg:block mx-auto" />
+      <!-- grid item 2 -->
+      <div class="block mx-auto">
+        <!-- desktop copyright -->
+        <p class="text-gray-300 text-xs tracking-tight text-center">
+          Shrimpcam! 2.0 · <a
+            class="hover:text-white font-medium text-gray-200 transition-all duration-300"
+            href="https://github.com/fieldofdisarray/shrimpcam"
+            >View Source Code</a
+          >
+          <!-- Add in the future -->
+          <!-- ·
+          <a
+            class="hover:text-white font-medium text-gray-200 transition-all duration-300"
+            href="">License</a
+          > -->
+        </p>
+      </div>
+      <!-- grid item 3 -->
+      <div class="hidden lg:block mx-auto" />
+    </div>
   </div>
 </div>
