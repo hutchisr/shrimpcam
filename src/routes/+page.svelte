@@ -86,7 +86,7 @@
 <div class="max-w-6xl lg:mx-auto">
   <!-- shrimpcam! -->
   <div class={playerHiddenStyle}>
-    <media-player autoplay controls muted aspect-ratio="16/9">
+    <media-player autoplay playsinline controls muted aspect-ratio="16/9">
       <media-outlet>
         <source
           src="https://shrimpcam.app/hls/shrimpcam.m3u8"
