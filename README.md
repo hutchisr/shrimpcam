@@ -1,6 +1,7 @@
-# shrimpcam 2.0
+# Shrimpcam
 
 a rewrite of [shrimpcam](https://github.com/hutchisr/shrimpcam) using SvelteKit and Tailwind CSS.
+
 ## Development
 
 Install dependencies with `npm install` and start a development server:
@@ -20,11 +21,9 @@ To create a production version of shrimpcam:
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
-
-then run:
+then run this to start:
 
 ```bash
 node build
 ```
-You can use a reverse proxy with Caddy or something after to host the production site on the web!
+You can use a reverse proxy with Caddy or something after to host the production site on the web! 
