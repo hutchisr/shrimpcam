@@ -112,7 +112,13 @@
       <div class="block mx-auto">
         <!-- desktop copyright -->
         <p class="text-gray-300 text-xs tracking-tight text-center">
-          Shrimpcam! 2.0 · <a
+          Shrimpcam! <img
+            src="/shrimp.png"
+            alt="shrimp"
+            class="w-3.5 h-3.5 mb-0.5 inline"
+          />
+          ·
+          <a
             class="hover:text-white font-medium text-gray-200 transition-all duration-300"
             href="https://github.com/fieldofdisarray/shrimpcam"
             >View Source Code</a
